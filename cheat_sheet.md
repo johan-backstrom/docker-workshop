@@ -48,6 +48,7 @@ Vanliga options är:
 - -p \[host port\]:\[container port] --> exponerar containerns port till hosten
 - -e \[env variable name\]=\[value\] --> sätter miljövariabel i containern
 - -v \[host folder\]:\[container folder\] --> mappar in en folder från hosten i containern
+- -l
 - --name \[containernamn\] --> sätter ett namn på containern
 
 Exempel:

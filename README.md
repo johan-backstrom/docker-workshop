@@ -69,6 +69,7 @@ fördefinierat recept. Därför är det viktigt att man frågar ifall man kör f
   - Docker cli
 - docker help
 - docker pull -> se [Docker hub](https://hub.docker.com/explore/)
+- En image --> en eller flera containrar, jmf maven
 - docker images, run, ps, inspect, stop, exec, logs, rm
 - Mappa portar
 - Sätt miljövariabler
@@ -118,10 +119,18 @@ Tips:
   - Kolla hur man exponerar statiska filer i nginx-imagen som vi laddat ner
   - Du kan läsa dokumentationen för nginx-imagen på [https://hub.docker.com/_/nginx/](https://hub.docker.com/_/nginx/)
   
-## Lab 3
+## Lab 3 (i mån av tid)
 
 Bygg din egen docker-container (igen):
 
 - Bygg en egen container som kör skriptet i mappen silly_server
 
 Tips: Basera den på debian:jessie, då du redan har den imagen lokalt
+
+## Links
+
+- Rekommendation: en service/process per container
+- Containrar som pratar med varandra behöver ett bestående begrepp: link
+
+
+
