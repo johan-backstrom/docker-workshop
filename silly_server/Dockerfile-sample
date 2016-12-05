@@ -1,0 +1,4 @@
+## Empty dockerfile, add your commands and uncomment below lines to install cowsay
+
+#RUN apt-get update && apt-get install -y cowsay
+#RUN ln -s /usr/games/cowsay /usr/bin

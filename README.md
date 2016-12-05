@@ -69,7 +69,7 @@ fördefinierat recept. Därför är det viktigt att man frågar ifall man kör f
   - Docker cli
 - docker help
 - docker pull -> se [Docker hub](https://hub.docker.com/explore/)
-- docker images, run, ps, inspect, stop, exec, rm
+- docker images, run, ps, inspect, stop, exec, logs, rm
 - Mappa portar
 - Sätt miljövariabler
 - Kolla på [cheat sheet](./cheat_sheet.md)
@@ -111,9 +111,17 @@ Tips:
 Bygg en egen docker-container:
 
 - Bygg din egen container m.h.a. en Dockerfile så att den exponerar en statisk websida m.h.a. nginx
-- Starta containern så att du kan surfa till den sttiska sidan på http://localhost:80
+- Starta containern så att du kan surfa till den statiska sidan på http://localhost:80
 
 
 Tips: 
-  - en fil som läggs i mappen /usr/share/nginx/html i en nginx-container kommer exponeras i roten på webservern.
+  - Kolla hur man exponerar statiska filer i nginx-imagen som vi laddat ner
   - Du kan läsa dokumentationen för nginx-imagen på [https://hub.docker.com/_/nginx/](https://hub.docker.com/_/nginx/)
+  
+## Lab 3
+
+Bygg din egen docker-container (igen):
+
+- Bygg en egen container som kör skriptet i mappen silly_server
+
+Tips: Basera den på debian:jessie, då du redan har den imagen lokalt
