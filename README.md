@@ -49,3 +49,71 @@ som en zipfil och packa upp det på din dator.
 
 OBS! Mer innehåll kommer läggas till i detta repo, så ifall du vill ladda ner som zip, vänta med det tills vi närmar
 oss själva workshoppen.
+
+# Agenda för workshop-kvällen
+
+## Välkomna och introduktion
+
+- Välkommen och snabb presentationsrunda.
+- Vad är docker, hur fungerar det och varför ska man hålla på med det?
+- Kort genomgång av agenda och upplägg
+  - Mix mellan presentation och labbar
+  - Upplägget på labbarna är väldigt fritt och syftar till att man själv söker information snarare än följa ett
+fördefinierat recept. Därför är det viktigt att man frågar ifall man kör fast!
+  - Mitt förslag är att man hjälper varandra två och två men att alla utför labbarna på sin dator.
+
+## Grundläggande hantering
+
+- Hur funkar det?
+  - Docker host
+  - Docker cli
+- docker help
+- docker pull -> se [Docker hub](https://hub.docker.com/explore/)
+- docker images, run, ps, inspect, stop, exec, rm
+- Mappa portar
+- Sätt miljövariabler
+- Kolla på [cheat sheet](./cheat_sheet.md)
+
+## Lab 1
+
+Bli bekväma med att hantera containrar.
+
+tips: använd flaggan -d i nedanstående steg
+
+- Starta upp en nginx-container med en port 80 mappad till din host.
+  - öppna en browser och surfa till din mappade port
+- Starta upp ytterligare en nginx med ett namn och 80 mappad till din host
+- lista dina docker-containrar
+- Starta upp ytterligare en container med en miljövariabel satt
+- Använd docker inspect för att verifiera att miljövariabeln är satt
+- Kör kommandon inne i dockerkontainern
+  - Verifiera att de miljövariabler du satt finns inne i containern
+  - Kör bash inne i containern, lista processer och miljövariabler (kommandon att exekvera inne i containern: env, ps -ef)
+  - testa kill \<pid\> --> (där pid är nginx processid)vad tror du kommer hända?
+- lista alla containrar (inkl stoppade)
+- ta bort alla containrar du just skapat
+
+Tips:
+
+- "docker ps" är din bästa vän!
+
+## Dockerfilen
+
+- Exempel på en dockerfil
+- Images namnkonvention registry/repo/name:tag- checksummor och lager
+- docker build, build context, tag, Dockerfile
+- grundläggande kommandon i Dockerfile: FROM, RUN, ADD, EXPOSE, CMD, ENV
+- [Dockerfile reference](https://docs.docker.com/engine/reference/builder/)
+
+
+## Lab 2
+
+Bygg en egen docker-container:
+
+- Bygg din egen container m.h.a. en Dockerfile så att den exponerar en statisk websida m.h.a. nginx
+- Starta containern så att du kan surfa till den sttiska sidan på http://localhost:80
+
+
+Tips: 
+  - en fil som läggs i mappen /usr/share/nginx/html i en nginx-container kommer exponeras i roten på webservern.
+  - Du kan läsa dokumentationen för nginx-imagen på [https://hub.docker.com/_/nginx/](https://hub.docker.com/_/nginx/)
