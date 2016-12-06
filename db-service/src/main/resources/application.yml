@@ -1,3 +1,8 @@
 server:
   contextPath: /
   port: 8080
+
+db:
+  username: postgres
+  host: my.postgres.host.com
+  password: postgres

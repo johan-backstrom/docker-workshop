@@ -7,5 +7,6 @@ CREATE TABLE Person (
 INSERT INTO Person
 VALUES
 ('1', 'Johan', 'Bäckström'),
-('2', 'John', 'Baxster'),
-('3', 'Jonnie', 'Boy');
+('2', 'John', 'Baxter'),
+('3', 'Jonnie', 'Boy'),
+('4', 'Jimmy', 'Bendrix');
