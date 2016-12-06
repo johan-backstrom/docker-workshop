@@ -145,8 +145,11 @@ Tips:
 Nu blir det lite svårare: Flera docker containrar som pratar med varandra...
 
 Denna gång har vi en java-applikation som pratar med en relationsdatabas (PostgreSQL). Javaappen finns under
-foldern db_service i detta projekt. Det finns redan en byggd applikation incheckad i repot under 
-db-service/build/libs/db-service.jar.
+foldern db_service i detta projekt. Har ni java installerat så är det enklast att bygga projektet själv med:
+
+    ./gradlew build
+
+Annars kan ni ladda ner filen med den länk som jag skickat ut.
 
 ### Om applikationen
 
