@@ -224,3 +224,4 @@ djupare info.
 ## Avslutning
 
 Tack för visat intresse!
+
