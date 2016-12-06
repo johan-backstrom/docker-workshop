@@ -65,8 +65,9 @@ fördefinierat recept. Därför är det viktigt att man frågar ifall man kör f
 
 - Hur funkar det?
   - Docker vs. virtualisering
-  - Docker host
+  - Docker host och docker-machine/toolbox
   - Docker cli
+  - Inifrån containern ser det ut som an vanlig linux host
 - docker help
 - docker pull -> se [Docker hub](https://hub.docker.com/explore/)
 - En image --> en eller flera containrar, jmf maven
@@ -81,7 +82,7 @@ Bli bekväma med att hantera containrar.
 
 Tips: använd flaggan -d i nedanstående steg
 
-- Kolla vilken nginx-container du har lokalt med "docker images" (name:tag)
+- Kolla vilken nginx-image du har lokalt med "docker images" (name:tag)
 - Starta upp en nginx-container med en port 80 mappad till din host.
   - öppna en browser och surfa till din mappade port
 - Starta upp ytterligare en nginx med ett namn och 80 mappad till din host
@@ -120,15 +121,17 @@ Bygg din egen docker-container:
 Tips: 
 - Basera den på debian:jessie, då du redan har den imagen lokalt
 - Använd Dockerfile-sample och byt namn på den till Dockerfile
+- Skapa inte dockerfilen i projektets rot-mapp utan i en underfolder (tillsammans med de övriga filer som behövs för att bygga den)
 
 ## Lab 3
 
 Bygg en egen docker-container (igen):
 
-- Bygg din egen container m.h.a. en Dockerfile så att den exponerar en statisk websida m.h.a. nginx
-- Starta containern så att du kan surfa till den statiska sidan på http://localhost:80
+- Bygg din egen container m.h.a. en Dockerfile så att den exponerar en statisk websida i nginx
+- Starta containern så att du kan surfa till den statiska sidan på http://<docker-host>:80
 
 Tips: 
+  - nginx kan agera som en webserver för statiskt content
   - Kolla hur man exponerar statiska filer i nginx-imagen som vi laddat ner. Du kan läsa dokumentationen 
   för nginx-imagen på [https://hub.docker.com/_/nginx/](https://hub.docker.com/_/nginx/)
 
@@ -143,7 +146,7 @@ Nu blir det lite svårare: Flera docker containrar som pratar med varandra...
 
 Denna gång har vi en java-applikation som pratar med en relationsdatabas (PostgreSQL). Javaappen finns under
 foldern db_service i detta projekt. Det finns redan en byggd applikation incheckad i repot under 
-db-service/build/libs/db-service.jar
+db-service/build/libs/db-service.jar.
 
 ### Om applikationen
 
@@ -152,11 +155,15 @@ Javaapplikationen behöver ha följande miljövariabler satta för att kunna kom
 - DB_HOST
 - DB_PASSWORD
 
-För att starta applikationen kör man komandot "java -jar db-service.jar". Applikationen exponerar då ett rest-api
-på <host>:8008/person/list. för att hämta info fån applikationen kan man göra en GET med ex. postman eller en browser.
+Den förväntar sig också att det finns en användare med namn "postgres" (vilket är default i postgres-imagen)
 
-Java-applikationen förväntar sig att det finns en tabell i datbasen som heter "person". Ett skript som skapar tabellen och 
-fyller den med lite data finns under mappen sql.
+För att starta applikationen kör man komandot "java -jar db-service.jar". Applikationen exponerar då ett rest-api
+på <host>:8008/person/list. För att hämta info fån applikationen kan man göra en GET med ex. postman eller en browser.
+
+### Om databasen
+
+PostgreSQL är en open source relationsdatabas. Java-applikationen förväntar sig att det finns en tabell i datbasen som heter "person". 
+Ett skript som skapar tabellen och fyller den med lite data finns under mappen postgres.
 
 ### Instruktioner
 
@@ -172,14 +179,13 @@ Tips: Vilken av de images vi laddade ner tidigare kan vi använda för att köra
 
 Tips:
 
-- Genom att lägga in sql-filen i en mapp kan postgres-images exekvera det när containern startar. Läs dokumentationen 
+- Genom att lägga in sql-filen i en mapp i imagen kommer postgres-containern exekvera den när den startar. Läs dokumentationen 
 på docker hub för postgres-images under "How to extend this image" om hur man gör.
 
 Kommentar:
 
 - Vi skulle lika gärna utgå från en blank debian eller ubuntu image och själva installera java och/eller postgres med hjälp
-av till exempel apt-get, men det är mycket enklare om vi använder de officiella images som finns tillgängliga och bara
-utökar dem.
+av till exempel apt-get, men det är mycket enklare om vi använder de officiella images som finns tillgängliga och utökar dem.
 
 ## Docker compose
 
@@ -194,3 +200,27 @@ Det finns både en v1 och en v2.
     - ports
     - links
 - up, stop, rm, pull
+
+## Lab 5
+
+Dra igång java-applikationen och databasen från förra laben med docker compose.
+
+- Definiera databasimagen i compose-filen
+- Definiera java-appen med en länk till databasen
+- starta systemet och testa att du kommer åt rest-endpointen
+- Ifall du har tid över:
+  - Stoppa in en nginx-container i compose-filen som du konfar så att du kan surfa till http://<docker-host>/ och få listan med
+  personer från föregående steg.
+
+Tips:
+
+- Yaml måste indenteras konsekvent med "space" (två mellanslag är standard) och inte "tab".
+- Yaml är case sensitive
+- Compose är mycket rikt på funktionalitet, se [referensdokumentationen](https://docs.docker.com/compose/compose-file/) för 
+djupare info.
+
+## Kort om ett workflow för en större organisation
+
+## Avslutning
+
+Tack för visat intresse!
