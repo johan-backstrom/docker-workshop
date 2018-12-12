@@ -65,12 +65,12 @@ fördefinierat recept. Därför är det viktigt att man frågar ifall man kör f
 
 - Hur funkar det?
   - Docker vs. virtualisering
-  - Docker host och docker-machine/toolbox
+  - Docker host och docker for win/mac
   - Docker cli
   - Inifrån containern ser det ut som an vanlig linux host
 - docker help
 - docker pull -> se [Docker hub](https://hub.docker.com/explore/)
-- En image --> en eller flera containrar, jmf maven
+- En image --> en eller flera containrar, jmf virtualisering, maven, npm etc
 - docker images, run, ps, inspect, stop, exec, logs, rm
 - Mappa portar
 - Sätt miljövariabler
@@ -89,11 +89,12 @@ Tips: använd flaggan -d i nedanstående steg
   - vad händer om du mappar till samma port?
 - lista dina docker-containrar
 - Starta upp ytterligare en container med en miljövariabel satt
+    - tips: ge den ett namn så kan du lättare referera till den senare.
 - Använd docker inspect för att verifiera att miljövariabeln är satt
 - Kör kommandon inne i dockerkontainern
   - Verifiera att de miljövariabler du satt finns inne i containern
-  - Kör bash inne i containern, lista processer och miljövariabler (kommandon att exekvera inne i containern: env, ps -ef)
-  - testa kill \<pid\> --> (där pid är nginx processid)vad tror du kommer hända?
+  - Kör bash inne i containern och lista miljövariabler (kommandot printenv)
+  - testa kommandot "kill 1" --> (där 1 är processid för nginx) vad tror du kommer hända?
 - lista alla containrar (inkl stoppade)
 - ta bort alla containrar du just skapat
 
@@ -101,7 +102,7 @@ Tips:
 
 - "docker ps" är din bästa vän!
 - Ifall docker börjar ladda ner containrar från docker hub, dubbelkolla att du skrivit rätt namn:tag
-- Kör du docker toolbox (troligt om du kör windows) har din docker host troligvis följande IP: 192.168.99.100
+- Kör du docker toolbox (om du kör en äldre windowsinstallation) har din docker host troligvis följande IP: 192.168.99.100
 
 ## Dockerfilen
 
@@ -119,16 +120,21 @@ Bygg din egen docker-container:
 - Bygg en egen container som kör skriptet i mappen silly_server
 
 Tips: 
-- Basera den på debian:jessie, då du redan har den imagen lokalt
-- Använd Dockerfile-sample och byt namn på den till Dockerfile
+- Basera den på debian:stretch-slim, då du redan har den imagen lokalt. (hur kommer det sig?)
 - Skapa inte dockerfilen i projektets rot-mapp utan i en underfolder (tillsammans med de övriga filer som behövs för att bygga den)
+- för att installera cowsay används följande kommandon:
+
+```
+apt-get update && apt-get install -y cowsay
+ln -s /usr/games/cowsay /usr/bin
+```
 
 ## Lab 3
 
 Bygg en egen docker-container (igen):
 
-- Bygg din egen container m.h.a. en Dockerfile så att den exponerar en statisk websida i nginx
-- Starta containern så att du kan surfa till den statiska sidan på http://<docker-host>:80
+- Bygg din egen container m.h.a. en Dockerfile så att den exponerar en statisk websida i nginx (en färdig statisk html-sida finns i foldern static_web_server)
+- Starta containern så att du kan surfa till sidan på http://localhost:80
 
 Tips: 
   - nginx kan agera som en webserver för statiskt content
@@ -161,7 +167,7 @@ Javaapplikationen behöver ha följande miljövariabler satta för att kunna kom
 Den förväntar sig också att det finns en användare med namn "postgres" (vilket är default i postgres-imagen)
 
 För att starta applikationen kör man komandot "java -jar db-service.jar". Applikationen exponerar då ett rest-api
-på <host>:8008/person/list. För att hämta info fån applikationen kan man göra en GET med ex. postman eller en browser.
+på <host>:8008/person/list. För att hämta info fån applikationen kan man göra en GET med  en browser eller annan http-klient som postman.
 
 ### Om databasen
 
@@ -173,24 +179,24 @@ Ett skript som skapar tabellen och fyller den med lite data finns under mappen p
 Tips: Vilken av de images vi laddade ner tidigare kan vi använda för att köra en java-applikation och en postgres db?
 
 - Bygg med hjälp av en dockerfil en image som kör jar-filen
-  - Miljövariablerna kan sättas i dockerfilen men helst "runtime", alltså som -e parameter till docker run
+  - Miljövariablerna "kan" sättas i dockerfilen men helst "runtime", alltså som -e parameter till docker run
 - Bygg med hjälp av en dockerfil en image som innehåller en postgres-databas med tabellen och datat från .sql-filen
 - Starta din postgres-image (det hjälper om du ger den ett namn med --name flaggan)
 - Starta din java-image med en länk till din postgres image och exponera ut porten 8080 till din docker host
 - Gör ett webanrop till http://\<docker host\>:\<mappad port\>/person/list
   - Får du en lista med personer?
+- Testa att exekvera kommandot "cat /etc/hosts" inne i java-kontainern. Förstår du hur länkningen funkar?
 
 Tips:
 
-- Genom att lägga in sql-filen i en mapp i imagen kommer postgres-containern exekvera den när den startar. Läs dokumentationen 
-på docker hub för postgres-images under "How to extend this image" om hur man gör.
+- Genom att lägga in sql-filen i en speciell mapp i imagen kommer postgres-containern exekvera sql-filen första gången startar. Läs dokumentationen på docker hub för postgres-images under "How to extend this image" om hur man gör.
 
 Kommentar:
 
-- Vi skulle lika gärna utgå från en blank debian eller ubuntu image och själva installera java och/eller postgres med hjälp
-av till exempel apt-get, men det är mycket enklare om vi använder de officiella images som finns tillgängliga och utökar dem.
+- Vi skulle lika gärna utgå från en blank debian eller centos image och själva installera java och postgres med hjälp
+av till exempel apt-get eller yum, men det är mycket enklare om vi använder de officiella images som finns tillgängliga och utökar dem istället.
 
-## Docker compose
+## Docker compose (i mån av tid)
 
 Med compose kan vi dra igång många containrar samtidigt!
 
@@ -219,7 +225,7 @@ Tips:
 
 - Yaml måste indenteras konsekvent med "space" (två mellanslag är standard) och inte "tab".
 - Yaml är case sensitive
-- Compose är mycket rikt på funktionalitet, se [referensdokumentationen](https://docs.docker.com/compose/compose-file/) för 
+- Compose är rikt på funktionalitet, se [referensdokumentationen](https://docs.docker.com/compose/compose-file/) för 
 djupare info.
 
 ## Kort om ett workflow för en större organisation
