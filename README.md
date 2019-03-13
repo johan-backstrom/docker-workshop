@@ -4,10 +4,7 @@ Välkomna till utbildning och workshop med verktyget docker.
 
 ## Förberedelser
 
-För att man ska kunna hänga med i workshopen behöver man ha en dator med sig med Docker installerat samt
-att man gått igenom nedanstående steg innan vi startar. Skulle någon ha problem med något av dessa steg
-så kommer jag finnas på plats på kontoret minst en timma innan själva workshopen drar igång. Jag skulle 
-uppskatta att förberedelserna tar ca 20-40 minuter, så spara inte detta till precis innan vi drar igång.
+För att man ska kunna hänga med i workshopen behöver man ha en dator med sig med Docker installerat samt att man gått igenom nedanstående steg innan vi startar. Skulle någon ha problem med något av dessa steg så kommer jag finnas på plats på kontoret minst en timma innan själva workshopen drar igång. Jag skulle uppskatta att förberedelserna tar ca 20-40 minuter, så spara inte detta till precis innan vi drar igång.
 
 Det ni behöver förbereda är följande:
 
@@ -17,8 +14,7 @@ Det ni behöver förbereda är följande:
 
 ### Installera docker
 
-Beroende på vilket OS och vilken version du kör så kommer det vara lite olika installation. Läs noga när
-du väljer din installation så att det blir rätt!
+Beroende på vilket OS och vilken version du kör så kommer det vara lite olika installation. Läs noga när du väljer din installation så att det blir rätt!
 
 Ett problem som många PC-användare, oberoende av OS, stöter på är att man måste aktivera någonting
 som heter "Virtualization Technology" (eller liknande) i BIOS innan docker fungerar.
@@ -27,38 +23,35 @@ https://docs.docker.com/engine/installation/
 
 ### Ladda ner base-images
 
-Tyvärr har jag vid flera tillfällen upplevt att internet på kontoret är lite långsamt, så för att underlätta
-själva workshoppen så är det mycket bra om ni kan ladda ner de images vi kommer använda under workshoppen redan
+Tyvärr har jag vid flera tillfällen upplevt att internet på kontoret är lite långsamt, så för att underlätta själva workshoppen så är det mycket bra om ni kan ladda ner de images vi kommer använda under workshoppen redan
 vid ett tidigare tillfälle. För att göra det, kör följande kommandon i en terminal:
 
     docker pull nginx
     docker pull postgres:9.5
     docker pull openjdk:8-jre
-    
+    docker pull openjdk:8
+
 Verifiera sedan att dessa images finns lokalt med följande kommando:
 
     docker images
-    
+
 ### Klona eller ladda ner detta repo
 
 Detta repo kommer innehålla de exempel som vi abetar med under själva worksopen.
 
-Har du git installerat så klonar du detta repo, annars finns det en länk på github för att ladda ner repot
-som en zipfil och packa upp det på din dator.
+Har du git installerat så klonar du detta repo, annars finns det en länk på github för att ladda ner repot som en zipfil och packa upp det på din dator.
 
-OBS! Mer innehåll kommer läggas till i detta repo, så ifall du vill ladda ner som zip, vänta med det tills vi närmar
-oss själva workshoppen.
+OBS! Mer innehåll kommer läggas till i detta repo, så ifall du vill ladda ner som zip, vänta med det tills vi närmar oss själva workshoppen.
 
 # Agenda för workshop-kvällen
 
 ## Välkomna och introduktion
 
 - Välkommen och snabb presentationsrunda.
-- Vad är docker, hur fungerar det och varför ska man hålla på med det?
+- Vad är docker, hur fungerar det, varför ska man hålla på med det och vad ska man använda det till?
 - Kort genomgång av agenda och upplägg
   - Mix mellan presentation och labbar
-  - Upplägget på labbarna är väldigt fritt och syftar till att man själv söker information snarare än följa ett
-fördefinierat recept. Därför är det viktigt att man frågar ifall man kör fast!
+  - Upplägget på labbarna är väldigt fritt och syftar till att man själv söker information snarare än följa ett fördefinierat recept. Därför är det viktigt att man frågar ifall man kör fast!
   - Mitt förslag är att man hjälper varandra två och två men att alla utför labbarna på sin dator.
 
 ## Grundläggande hantering
@@ -102,7 +95,7 @@ Tips:
 
 - "docker ps" är din bästa vän!
 - Ifall docker börjar ladda ner containrar från docker hub, dubbelkolla att du skrivit rätt namn:tag
-- Kör du docker toolbox (om du kör en äldre windowsinstallation) har din docker host troligvis följande IP: 192.168.99.100
+- Kör du docker toolbox (om du kör en äldre windowsinstallation) har din docker host troligtvis följande IP: 192.168.99.100
 
 ## Dockerfilen
 
@@ -119,7 +112,8 @@ Bygg din egen docker-container:
 
 - Bygg en egen container som kör skriptet i mappen silly_server
 
-Tips: 
+Tips:
+- Skriptet som du ska köra i docker-containern behöver ha linux-radbrytningar (git verkar ha som standard-beteende att ändra radbrytningar till det OS man checkar ut på)
 - Basera den på debian:stretch-slim, då du redan har den imagen lokalt. (hur kommer det sig?)
 - Skapa inte dockerfilen i projektets rot-mapp utan i en underfolder (tillsammans med de övriga filer som behövs för att bygga den)
 - för att installera cowsay används följande kommandon:
@@ -136,9 +130,9 @@ Bygg en egen docker-container (igen):
 - Bygg din egen container m.h.a. en Dockerfile så att den exponerar en statisk websida i nginx (en färdig statisk html-sida finns i foldern static_web_server)
 - Starta containern så att du kan surfa till sidan på http://localhost:80
 
-Tips: 
+Tips:
   - nginx kan agera som en webserver för statiskt content
-  - Kolla hur man exponerar statiska filer i nginx-imagen som vi laddat ner. Du kan läsa dokumentationen 
+  - Kolla hur man exponerar statiska filer i nginx-imagen som vi laddat ner. Du kan läsa dokumentationen
   för nginx-imagen på [https://hub.docker.com/_/nginx/](https://hub.docker.com/_/nginx/)
 
 ## Links
@@ -155,7 +149,11 @@ foldern db_service i detta projekt. Har ni java installerat så är det enklast 
 
     ./gradlew build
 
-Annars kan ni ladda ner filen med den länk som jag skickat ut.
+Annars kan man bygga applikationen innuti en docker-container med följande kommando:
+
+    docker run --rm -v "$PWD":/builddir -w /builddir openjdk:8 ./gradlew clean build
+
+Worst case kan ni säga till så kan jag dela en redan byggd fil som ni kan ladda ner.
 
 ### Om applikationen
 
@@ -171,7 +169,7 @@ på <host>:8008/person/list. För att hämta info fån applikationen kan man gö
 
 ### Om databasen
 
-PostgreSQL är en open source relationsdatabas. Java-applikationen förväntar sig att det finns en tabell i datbasen som heter "person". 
+PostgreSQL är en open source relationsdatabas. Java-applikationen förväntar sig att det finns en tabell i datbasen som heter "person".
 Ett skript som skapar tabellen och fyller den med lite data finns under mappen postgres.
 
 ### Instruktioner
@@ -225,7 +223,7 @@ Tips:
 
 - Yaml måste indenteras konsekvent med "space" (två mellanslag är standard) och inte "tab".
 - Yaml är case sensitive
-- Compose är rikt på funktionalitet, se [referensdokumentationen](https://docs.docker.com/compose/compose-file/) för 
+- Compose är rikt på funktionalitet, se [referensdokumentationen](https://docs.docker.com/compose/compose-file/) för
 djupare info.
 
 ## Kort om ett workflow för en större organisation
@@ -233,4 +231,3 @@ djupare info.
 ## Avslutning
 
 Tack för visat intresse!
-
