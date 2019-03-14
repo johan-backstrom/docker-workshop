@@ -1,0 +1,16 @@
+version: '2'
+
+services:
+
+  postgres:
+    build: ./postgres
+    environment:
+      - POSTGRES_PASSWORD=password
+
+  db-service:
+    build: ./db-service
+    environment:
+      - DB_HOST=postgres
+      - DB_PASSWORD=password
+    ports:
+      - 8091:8080
